@@ -108,6 +108,8 @@ GameObject:
   - component: {fileID: 6342304330124175529}
   - component: {fileID: 4894549591852749021}
   - component: {fileID: 2393559894069517925}
+  - component: {fileID: 7435424198205184181}
+  - component: {fileID: 5127855259630495646}
   m_Layer: 0
   m_Name: Player Character
   m_TagString: Untagged
@@ -143,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 368007413
+  GlobalObjectIdHash: 3859916188
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -319,6 +321,37 @@ MonoBehaviour:
   _MinLookAngle: -100
   _MaxLookAngle: 100
   _Viewpoint: {fileID: 7613409481791953454}
+--- !u!114 &7435424198205184181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107789274508960689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e0e98e80a444e8bbffd2e9e16868793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gun
+  ShowTopMostFoldoutHeaderGroup: 1
+  _ShootingOrigin: {fileID: 7613409481791953454}
+  _Damage: 5
+  _TracePrefab: {fileID: 0}
+  _DecalPrefab: {fileID: 0}
+--- !u!114 &5127855259630495646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107789274508960689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8792e81f37a344e7a2845b89f5ac6986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth
+  ShowTopMostFoldoutHeaderGroup: 1
+  _Hp: 100
 --- !u!1 &8841843867478639470
 GameObject:
   m_ObjectHideFlags: 0

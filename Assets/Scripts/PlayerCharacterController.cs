@@ -8,6 +8,8 @@ public class PlayerCharacterController : MonoBehaviour
 	private PlayerCharacterMovement _playerCharacterMovement;
 	
 	private CharacterLook _characterLook;
+
+	private Weapon _weapon;
 	
 	private PlayerInput _playerInput;
 
@@ -22,6 +24,8 @@ public class PlayerCharacterController : MonoBehaviour
 		_playerInput.actions["Move"].canceled += Move;
 
 		_playerInput.actions["Look"].performed += Look;
+		
+		_playerInput.actions["Attack"].started += Attack;
 	}
 	
 	private void Move(InputAction.CallbackContext context)
@@ -33,6 +37,11 @@ public class PlayerCharacterController : MonoBehaviour
 	{
 		Vector2 delta = context.ReadValue<Vector2>();
 		_characterLook.RotateLook(delta);
+	}
+	
+	private void Attack(InputAction.CallbackContext obj)
+	{
+		_weapon.Shoot();
 	}
 
 	private void FixedUpdate()
@@ -50,5 +59,6 @@ public class PlayerCharacterController : MonoBehaviour
 		_playerCharacter = character;
 		_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
 		_characterLook = character.GetComponent<CharacterLook>();
+		_weapon = character.GetComponent<Weapon>();
 	}
 }
