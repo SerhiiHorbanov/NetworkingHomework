@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerCharacterMovement : MonoBehaviour
@@ -11,6 +10,11 @@ public class PlayerCharacterMovement : MonoBehaviour
     
     public Vector3 _GlobalMoveDir;
 
+    public void SetMoveDirFromRelative(Vector2 relativeDir)
+    {
+        _GlobalMoveDir = transform.forward * relativeDir.y + transform.right * relativeDir.x;
+    }
+    
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();

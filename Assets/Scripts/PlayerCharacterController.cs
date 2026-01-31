@@ -9,6 +9,8 @@ public class PlayerCharacterController : MonoBehaviour
 	private CharacterLook _characterLook;
 	
 	private PlayerInput _playerInput;
+
+	private Vector2 _relativeMoveDir;
 	
 	private void Awake()
 	{
@@ -23,10 +25,7 @@ public class PlayerCharacterController : MonoBehaviour
 	
 	private void Move(InputAction.CallbackContext context)
 	{
-		Vector2 relativeDirection = context.ReadValue<Vector2>();
-		Vector3 globalMoveDir = transform.forward * relativeDirection.y + transform.right * relativeDirection.x;
-		
-		_playerCharacterMovement._GlobalMoveDir = globalMoveDir;
+		_relativeMoveDir = context.ReadValue<Vector2>();
 	}
 	
 	private void Look(InputAction.CallbackContext context)
@@ -35,7 +34,12 @@ public class PlayerCharacterController : MonoBehaviour
 		print(delta);
 		_characterLook.RotateLook(delta);
 	}
-	
+
+	private void FixedUpdate()
+	{
+		_playerCharacterMovement.SetMoveDirFromRelative(_relativeMoveDir);
+	}
+
 	private void OnDestroy()
 	{
 		OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= AttachToCharacter;
