@@ -6,6 +6,7 @@ public class PlayerCharacterController : MonoBehaviour
 {
 	private PlayerCharacter _playerCharacter;
 	private PlayerCharacterMovement _playerCharacterMovement;
+	private CharacterLook _characterLook;
 	
 	private PlayerInput _playerInput;
 	
@@ -16,6 +17,8 @@ public class PlayerCharacterController : MonoBehaviour
 		_playerInput = GetComponent<PlayerInput>();
 		_playerInput.actions["Move"].performed += Move;
 		_playerInput.actions["Move"].canceled += Move;
+
+		_playerInput.actions["Look"].performed += Look;
 	}
 	
 	private void Move(InputAction.CallbackContext context)
@@ -24,6 +27,13 @@ public class PlayerCharacterController : MonoBehaviour
 		Vector3 globalMoveDir = transform.forward * relativeDirection.y + transform.right * relativeDirection.x;
 		
 		_playerCharacterMovement._GlobalMoveDir = globalMoveDir;
+	}
+	
+	private void Look(InputAction.CallbackContext context)
+	{
+		Vector2 delta = context.ReadValue<Vector2>();
+		print(delta);
+		_characterLook.RotateLook(delta);
 	}
 	
 	private void OnDestroy()
@@ -35,5 +45,6 @@ public class PlayerCharacterController : MonoBehaviour
 	{
 		_playerCharacter = character;
 		_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
+		_characterLook = character.GetComponent<CharacterLook>();
 	}
 }
