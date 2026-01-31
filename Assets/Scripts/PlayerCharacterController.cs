@@ -5,28 +5,35 @@ using UnityEngine.InputSystem;
 public class PlayerCharacterController : MonoBehaviour
 {
 	private PlayerCharacter _playerCharacter;
+	private PlayerCharacterMovement _playerCharacterMovement;
+	
 	private PlayerInput _playerInput;
 	
 	private void Awake()
 	{
-		OwnedPlayerSpawnEventBus.PlayerSpawnEvent += OnCharacterSpawned;
+		OwnedPlayerSpawnEventBus.PlayerSpawnEvent += AttachToCharacter;
 		
 		_playerInput = GetComponent<PlayerInput>();
 		_playerInput.actions["Move"].performed += Move;
+		_playerInput.actions["Move"].canceled += Move;
 	}
 	
-	private void Move(InputAction.CallbackContext c)
+	private void Move(InputAction.CallbackContext context)
 	{
-		_playerCharacter.transform.position += (Vector3)c.ReadValue<Vector2>() * 0.1f;
-	}
-
-	private void OnCharacterSpawned(PlayerCharacter character)
-	{
-		_playerCharacter = character;
+		Vector2 relativeDirection = context.ReadValue<Vector2>();
+		Vector3 globalMoveDir = transform.forward * relativeDirection.y + transform.right * relativeDirection.x;
+		
+		_playerCharacterMovement._GlobalMoveDir = globalMoveDir;
 	}
 	
 	private void OnDestroy()
 	{
-		OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= OnCharacterSpawned;
+		OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= AttachToCharacter;
+	}
+
+	private void AttachToCharacter(PlayerCharacter character)
+	{
+		_playerCharacter = character;
+		_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
 	}
 }
