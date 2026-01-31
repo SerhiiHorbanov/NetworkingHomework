@@ -14,6 +14,13 @@ public class CharacterLook : MonoBehaviour
 		float prevX = LookDirectionInEulerAngles.x;
 		LookDirectionInEulerAngles.x = Mathf.Clamp(prevX - delta.y, _MinLookAngle, _MaxLookAngle);
 		
+		SetLook(LookDirectionInEulerAngles);
+	}
+
+	public void SetLook(Vector3 lookDirection)
+	{
+		LookDirectionInEulerAngles = lookDirection;
+		
 		transform.eulerAngles = new(0, LookDirectionInEulerAngles.y, 0);
 		_Viewpoint.localEulerAngles = new(LookDirectionInEulerAngles.x, 0, 0);
 	}

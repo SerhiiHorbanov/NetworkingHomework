@@ -1,33 +1,38 @@
 using Unity.Netcode;
 using UnityEngine;
 
-struct PlayerMovementSyncData : INetworkSerializeByMemcpy
+struct SyncData : INetworkSerializeByMemcpy
 {
     public Vector3 Position;
     public Vector3 Velocity;
     public Vector3 MoveDir;
+    public Vector3 LookDirection;
 }
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerCharacterMovement))]
-public class PlayerMovementSync : NetworkBehaviour
+[RequireComponent(typeof(CharacterLook))]
+public class PlayerMovementAndLookSync : NetworkBehaviour
 {
     private Rigidbody _rigidbody;
     private PlayerCharacterMovement _movement;
+    private CharacterLook _look;
     
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _movement = GetComponent<PlayerCharacterMovement>();
+        _look = GetComponent<CharacterLook>();
     }
 
     void Update()
     {
-        PlayerMovementSyncData movementSyncData = new()
+        SyncData movementSyncData = new()
         {
             Position = transform.position,
             Velocity = _rigidbody.linearVelocity,
-            MoveDir = _movement._GlobalMoveDir
+            MoveDir = _movement._GlobalMoveDir,
+            LookDirection = _look.LookDirectionInEulerAngles,
         };
 
         if (IsOwner)
@@ -37,21 +42,22 @@ public class PlayerMovementSync : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SendToServerRPC(PlayerMovementSyncData movementData, ServerRpcParams rpc = default)
+    private void SendToServerRPC(SyncData movementData, ServerRpcParams rpc = default)
     {
         ApplyMovementData(movementData);
         SendToClientsRPC(movementData);
     }
 
-    private void ApplyMovementData(PlayerMovementSyncData movementData)
+    private void ApplyMovementData(SyncData movementData)
     {
         transform.position = movementData.Position;
         _rigidbody.linearVelocity = movementData.Velocity;
         _movement._GlobalMoveDir = movementData.MoveDir;
+        _look.SetLook(movementData.LookDirection);
     }
 
     [Rpc(SendTo.NotOwner)]
-    private void SendToClientsRPC(PlayerMovementSyncData movementData)
+    private void SendToClientsRPC(SyncData movementData)
     {
         ApplyMovementData(movementData);
     }
