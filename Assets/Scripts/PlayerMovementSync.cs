@@ -33,7 +33,6 @@ public class PlayerMovementSync : NetworkBehaviour
         if (IsOwner)
         {
             SendToServerRPC(movementSyncData);
-            print($"sending movement info for {gameObject.name}");
         }
     }
 

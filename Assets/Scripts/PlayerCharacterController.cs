@@ -6,6 +6,7 @@ public class PlayerCharacterController : MonoBehaviour
 {
 	private PlayerCharacter _playerCharacter;
 	private PlayerCharacterMovement _playerCharacterMovement;
+	
 	private CharacterLook _characterLook;
 	
 	private PlayerInput _playerInput;
@@ -31,7 +32,6 @@ public class PlayerCharacterController : MonoBehaviour
 	private void Look(InputAction.CallbackContext context)
 	{
 		Vector2 delta = context.ReadValue<Vector2>();
-		print(delta);
 		_characterLook.RotateLook(delta);
 	}
 
