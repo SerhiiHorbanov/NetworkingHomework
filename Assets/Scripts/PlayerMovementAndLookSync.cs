@@ -41,8 +41,8 @@ public class PlayerMovementAndLookSync : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    private void SendToServerRPC(SyncData movementData, ServerRpcParams rpc = default)
+    [ServerRpc(Delivery = RpcDelivery.Unreliable)]
+    private void SendToServerRPC(SyncData movementData)
     {
         ApplyMovementData(movementData);
         SendToClientsRPC(movementData);
@@ -56,7 +56,7 @@ public class PlayerMovementAndLookSync : NetworkBehaviour
         _look.SetLook(movementData.LookDirection);
     }
 
-    [Rpc(SendTo.NotOwner)]
+    [Rpc(SendTo.NotOwner, Delivery = RpcDelivery.Unreliable)]
     private void SendToClientsRPC(SyncData movementData)
     {
         ApplyMovementData(movementData);
