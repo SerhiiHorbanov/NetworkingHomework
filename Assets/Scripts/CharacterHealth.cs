@@ -8,6 +8,14 @@ public class CharacterHealth : NetworkBehaviour
 	public void DamageWithoutSync(float damage)
 	{
 		_Hp -= damage;
+
+		if (!IsServer)
+			return;
+		
+		if (_Hp <= 0)
+		{
+			Destroy(gameObject);
+		}
 	}
 
 	public void DamageWithSync(float damage)
