@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _PlayerCharacterControllerPrefab: {fileID: 5940487775764577725, guid: 4359049bc5c480742a9864c6dd3285f7, type: 3}
 --- !u!114 &3557949438838304978
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32,25 +32,32 @@ public class PlayerCharacterController : MonoBehaviour
 	{
 		_relativeMoveDir = context.ReadValue<Vector2>();
 	}
+
+	private void FixedUpdate()
+	{
+		_playerCharacterMovement?.SetMoveDirFromRelative(_relativeMoveDir);
+	}
 	
 	private void Look(InputAction.CallbackContext context)
 	{
 		Vector2 delta = context.ReadValue<Vector2>();
-		_characterLook.RotateLook(delta);
+		_characterLook?.RotateLook(delta);
 	}
 	
 	private void Attack(InputAction.CallbackContext obj)
 	{
-		_weapon.Shoot();
-	}
-
-	private void FixedUpdate()
-	{
-		_playerCharacterMovement.SetMoveDirFromRelative(_relativeMoveDir);
+		_weapon?.Shoot();
 	}
 
 	private void OnDestroy()
 	{
+		_playerInput.actions["Move"].performed -= Move;
+		_playerInput.actions["Move"].canceled -= Move;
+
+		_playerInput.actions["Look"].performed -= Look;
+		
+		_playerInput.actions["Attack"].started -= Attack;
+		
 		OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= AttachToCharacter;
 	}
 

@@ -23,26 +23,47 @@ public class PlayerCharacterSpawner : MonoBehaviour
 	
 	private void SubscribeToNetworkManager()
 	{
-		Nm.OnServerStarted += Enable;
-		Nm.OnServerStopped += Disable;
+		if (Nm is null)
+			return;
+
+		Nm.OnServerStarted += OnServerStarted;
+		Nm.OnServerStopped += OnServerStopped;
 		
 		Nm.OnClientConnectedCallback += OnClientConnected;
 	}
 
 	private void UnsubscribeFromNetworkManager()
 	{
-		Nm.OnServerStarted -= Enable;
-		Nm.OnServerStopped -= Disable;
+		if (Nm is null)
+			return;
+		
+		Nm.OnServerStarted -= OnServerStarted;
+		Nm.OnServerStopped -= OnServerStopped;
 		
 		Nm.OnClientConnectedCallback -= OnClientConnected;
 	}
 	
-	private void Enable()
-		=> gameObject.SetActive(true);
-	private void Disable(bool _)
-		=> gameObject.SetActive(false);
+	private void OnServerStarted()
+	{
+		gameObject.SetActive(true);
+		PlayerCharacterDespawnedEventBus.PlayerCharacterDespawnedEvent += SpawnCharacterForClient;
+	}
+
+	private void OnServerStopped(bool _)
+	{
+		gameObject.SetActive(false);
+		PlayerCharacterDespawnedEventBus.PlayerCharacterDespawnedEvent -= SpawnCharacterForClient;
+	}
 	
 	private void OnClientConnected(ulong clientId)
+	{
+		if (!Nm.IsServer)
+			return;
+
+		SpawnCharacterForClient(clientId);
+	}
+	
+	private void SpawnCharacterForClient(ulong clientId)
 	{
 		GameObject character = Instantiate(_PlayerCharacterPrefab);
 		NetworkObject netObj = character.GetComponent<NetworkObject>();
