@@ -10,7 +10,7 @@ public class PlayerCharacterController : MonoBehaviour
 	
 	private CharacterLook _characterLook;
 
-	private Weapon _weapon;
+	private WeaponHolder _weaponHolder;
 	
 	private PlayerInput _playerInput;
 
@@ -47,7 +47,7 @@ public class PlayerCharacterController : MonoBehaviour
 	
 	private void Attack(InputAction.CallbackContext obj)
 	{
-		_weapon?.Shoot();
+		_weaponHolder?.Attack();
 	}
 
 	private void OnDestroy()
@@ -67,6 +67,6 @@ public class PlayerCharacterController : MonoBehaviour
 		_playerCharacter = character;
 		_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
 		_characterLook = character.GetComponent<CharacterLook>();
-		_weapon = character.GetComponent<Weapon>();
+		_weaponHolder = character.GetComponent<WeaponHolder>();
 	}
 }
