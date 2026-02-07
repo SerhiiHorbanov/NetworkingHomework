@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3859916188
+  GlobalObjectIdHash: 368007413
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -336,9 +336,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   ShowTopMostFoldoutHeaderGroup: 1
   _ShootingOrigin: {fileID: 7613409481791953454}
-  _Damage: 5
-  _TracePrefab: {fileID: 0}
-  _DecalPrefab: {fileID: 0}
+  _Damage: 50
+  _ShotGraphicsPrefab: {fileID: 3729116570332403315, guid: 3d9f3ba919863424e91cbb07077a1966, type: 3}
 --- !u!114 &5127855259630495646
 MonoBehaviour:
   m_ObjectHideFlags: 0
