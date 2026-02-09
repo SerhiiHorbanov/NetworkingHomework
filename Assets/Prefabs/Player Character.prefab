@@ -244,7 +244,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   ShowTopMostFoldoutHeaderGroup: 1
   _ShootingOrigin: {fileID: 7613409481791953454}
-  _Damage: 50
+  _Damage: 10
+  _DamageOverTime:
+    _DPS: 10
+    _TimeLeft: 4
   _ShotGraphicsPrefab: {fileID: 3729116570332403315, guid: 3d9f3ba919863424e91cbb07077a1966, type: 3}
 --- !u!1 &4515570331607502737
 GameObject:

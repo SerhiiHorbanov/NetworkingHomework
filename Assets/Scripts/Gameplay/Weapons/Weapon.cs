@@ -8,6 +8,7 @@ namespace Gameplay.Weapons
 	{
 		[SerializeField] private Transform _ShootingOrigin;
 		[SerializeField] private float _Damage;
+		[SerializeField] private DamageOverTime _DamageOverTime;
 		[SerializeField] private GameObject _ShotGraphicsPrefab;
 	
 		private const float RaycastLength = 10_000f;
@@ -29,6 +30,7 @@ namespace Gameplay.Weapons
 				if (hit.collider.TryGetComponent(out CharacterHealth characterHealth))
 				{
 					characterHealth.DamageWithSync(_Damage);
+					characterHealth.AddDamageOverTime(_DamageOverTime);
 				}
 			}
 
