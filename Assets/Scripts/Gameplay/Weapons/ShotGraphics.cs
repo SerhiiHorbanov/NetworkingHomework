@@ -32,18 +32,21 @@ namespace Gameplay.Weapons
 
         public void Update()
         {
-            float deltaTraceAlpha = Time.deltaTime / -_TraceFadeTime;
-            _TraceSprite.color += new Color(0,0,0, deltaTraceAlpha);
-            if (_TraceSprite.color.a <= 0) 
-                _TraceSprite.enabled = false;
-            
-            float deltaDecalAlpha = Time.deltaTime / -_DecalFadeTime;
-            _DecalSprite.color += new Color(0,0,0, deltaDecalAlpha);
-            if (_DecalSprite.color.a <= 0) 
-                _DecalSprite.enabled = false;
+            FadeAndTryDisableSprite(_TraceSprite);
+            FadeAndTryDisableSprite(_DecalSprite);
 
             if (!_TraceSprite.enabled && !_DecalSprite.enabled) 
                 Destroy(gameObject);
+            
+            return;
+
+            void FadeAndTryDisableSprite(SpriteRenderer sprite)
+            {
+                float deltaAlpha = Time.deltaTime / -_DecalFadeTime;
+                sprite.color += new Color(0,0,0, deltaAlpha);
+                if (sprite.color.a <= 0) 
+                    sprite.enabled = false;
+            }
         }
     }
 }
