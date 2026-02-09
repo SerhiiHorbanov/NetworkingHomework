@@ -3,16 +3,37 @@ using UnityEngine;
 
 public class CharacterHealth : NetworkBehaviour
 {
-	[SerializeField] public float _Hp;
+	[SerializeField] public float _MaxHp = 100;
+	public float Hp { get; private set; }
+	
+	private ValueChangedDelegate _valueChanged;
+	public event ValueChangedDelegate OnValueChanged
+	{
+		add => _valueChanged += value;
+		remove => _valueChanged -= value;
+	}
+	
+	public delegate void ValueChangedDelegate(float oldHp, float newHp);
+
+	private void Awake()
+	{
+		Hp = _MaxHp;
+	}
 
 	public void DamageWithoutSync(float damage)
 	{
-		_Hp -= damage;
+		float prevHp = Hp;
+		Hp -= damage;
+
+		if (prevHp == Hp)
+			return;
+		
+		_valueChanged?.Invoke(prevHp, Hp);
 
 		if (!IsServer)
 			return;
 		
-		if (_Hp <= 0)
+		if (Hp <= 0)
 		{
 			Destroy(gameObject);
 		}
@@ -27,11 +48,17 @@ public class CharacterHealth : NetworkBehaviour
 	}
 	
 	private void SyncHealth()
-		=> SyncHealthClientRPC(_Hp);
+		=> SyncHealthClientRPC(Hp);
 	
 	[ClientRpc]
 	public void SyncHealthClientRPC(float hp)
 	{
-		_Hp = hp;
+		float prevHp = Hp;
+		Hp = hp;
+
+		if (prevHp == Hp)
+			return;
+		
+		_valueChanged?.Invoke(prevHp, Hp);
 	}
 }
