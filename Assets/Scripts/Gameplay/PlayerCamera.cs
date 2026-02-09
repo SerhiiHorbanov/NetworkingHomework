@@ -1,27 +1,31 @@
+using Gameplay.PlayerCharacter;
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+namespace Gameplay
 {
-    private CharacterLook _look;
-
-    private void Awake()
+    public class PlayerCamera : MonoBehaviour
     {
-        OwnedPlayerSpawnEventBus.PlayerSpawnEvent += SetCharacter;
-    }
+        private CharacterLook _look;
 
-    private void SetCharacter(PlayerCharacter character)
-    {
-        _look = character.GetComponent<CharacterLook>();
-    }
-
-
-    private void LateUpdate()
-    {
-        if (_look != null)
+        private void Awake()
         {
-            Transform viewPoint = _look._Viewpoint;
-            transform.position = viewPoint.position;
-            transform.rotation = viewPoint.rotation;
+            OwnedPlayerSpawnEventBus.PlayerSpawnEvent += SetCharacter;
+        }
+
+        private void SetCharacter(PlayerCharacter.PlayerCharacter character)
+        {
+            _look = character.GetComponent<CharacterLook>();
+        }
+
+
+        private void LateUpdate()
+        {
+            if (_look != null)
+            {
+                Transform viewPoint = _look._Viewpoint;
+                transform.position = viewPoint.position;
+                transform.rotation = viewPoint.rotation;
+            }
         }
     }
 }

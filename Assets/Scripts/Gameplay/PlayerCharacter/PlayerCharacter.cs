@@ -1,22 +1,25 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerCharacter : NetworkBehaviour
+namespace Gameplay.PlayerCharacter
 {
-    [SerializeField] private GameObject _PlayerCharacterControllerPrefab;
-    
-    public override void OnNetworkSpawn()
+    public class PlayerCharacter : NetworkBehaviour
     {
-        if (IsOwner)
+        [SerializeField] private GameObject _PlayerCharacterControllerPrefab;
+    
+        public override void OnNetworkSpawn()
         {
-            GameObject controller = Instantiate(_PlayerCharacterControllerPrefab, transform);
-            controller.GetComponent<PlayerCharacterController>();
-            OwnedPlayerSpawnEventBus.Invoke(this);
+            if (IsOwner)
+            {
+                GameObject controller = Instantiate(_PlayerCharacterControllerPrefab, transform);
+                controller.GetComponent<PlayerCharacterController>();
+                OwnedPlayerSpawnEventBus.Invoke(this);
+            }
         }
-    }
     
-    public override void OnNetworkDespawn()
-    {
-        PlayerCharacterDespawnedEventBus.Invoke(OwnerClientId);
+        public override void OnNetworkDespawn()
+        {
+            PlayerCharacterDespawnedEventBus.Invoke(OwnerClientId);
+        }
     }
 }

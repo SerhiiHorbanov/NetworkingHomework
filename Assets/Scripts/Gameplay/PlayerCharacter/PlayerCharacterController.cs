@@ -1,72 +1,74 @@
-using Gameplay.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
-public class PlayerCharacterController : MonoBehaviour
+namespace Gameplay.PlayerCharacter
 {
-	private PlayerCharacter _playerCharacter;
-	private PlayerCharacterMovement _playerCharacterMovement;
-	
-	private CharacterLook _characterLook;
-
-	private WeaponHolder _weaponHolder;
-	
-	private PlayerInput _playerInput;
-
-	private Vector2 _relativeMoveDir;
-	
-	private void Awake()
+	[RequireComponent(typeof(PlayerInput))]
+	public class PlayerCharacterController : MonoBehaviour
 	{
-		OwnedPlayerSpawnEventBus.PlayerSpawnEvent += AttachToCharacter;
+		private PlayerCharacter _playerCharacter;
+		private PlayerCharacterMovement _playerCharacterMovement;
+	
+		private CharacterLook _characterLook;
+
+		private WeaponHolder _weaponHolder;
+	
+		private PlayerInput _playerInput;
+
+		private Vector2 _relativeMoveDir;
+	
+		private void Awake()
+		{
+			OwnedPlayerSpawnEventBus.PlayerSpawnEvent += AttachToCharacter;
 		
-		_playerInput = GetComponent<PlayerInput>();
-		_playerInput.actions["Move"].performed += Move;
-		_playerInput.actions["Move"].canceled += Move;
+			_playerInput = GetComponent<PlayerInput>();
+			_playerInput.actions["Move"].performed += Move;
+			_playerInput.actions["Move"].canceled += Move;
 
-		_playerInput.actions["Look"].performed += Look;
+			_playerInput.actions["Look"].performed += Look;
 		
-		_playerInput.actions["Attack"].started += Attack;
-	}
+			_playerInput.actions["Attack"].started += Attack;
+		}
 	
-	private void Move(InputAction.CallbackContext context)
-	{
-		_relativeMoveDir = context.ReadValue<Vector2>();
-	}
+		private void Move(InputAction.CallbackContext context)
+		{
+			_relativeMoveDir = context.ReadValue<Vector2>();
+		}
 
-	private void FixedUpdate()
-	{
-		_playerCharacterMovement?.SetMoveDirFromRelative(_relativeMoveDir);
-	}
+		private void FixedUpdate()
+		{
+			_playerCharacterMovement?.SetMoveDirFromRelative(_relativeMoveDir);
+		}
 	
-	private void Look(InputAction.CallbackContext context)
-	{
-		Vector2 delta = context.ReadValue<Vector2>();
-		_characterLook?.RotateLook(delta);
-	}
+		private void Look(InputAction.CallbackContext context)
+		{
+			Vector2 delta = context.ReadValue<Vector2>();
+			_characterLook?.RotateLook(delta);
+		}
 	
-	private void Attack(InputAction.CallbackContext obj)
-	{
-		_weaponHolder?.Attack();
-	}
+		private void Attack(InputAction.CallbackContext obj)
+		{
+			_weaponHolder?.Attack();
+		}
 
-	private void OnDestroy()
-	{
-		_playerInput.actions["Move"].performed -= Move;
-		_playerInput.actions["Move"].canceled -= Move;
+		private void OnDestroy()
+		{
+			_playerInput.actions["Move"].performed -= Move;
+			_playerInput.actions["Move"].canceled -= Move;
 
-		_playerInput.actions["Look"].performed -= Look;
+			_playerInput.actions["Look"].performed -= Look;
 		
-		_playerInput.actions["Attack"].started -= Attack;
+			_playerInput.actions["Attack"].started -= Attack;
 		
-		OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= AttachToCharacter;
-	}
+			OwnedPlayerSpawnEventBus.PlayerSpawnEvent -= AttachToCharacter;
+		}
 
-	private void AttachToCharacter(PlayerCharacter character)
-	{
-		_playerCharacter = character;
-		_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
-		_characterLook = character.GetComponent<CharacterLook>();
-		_weaponHolder = character.GetComponent<WeaponHolder>();
+		private void AttachToCharacter(PlayerCharacter character)
+		{
+			_playerCharacter = character;
+			_playerCharacterMovement = character.GetComponent<PlayerCharacterMovement>();
+			_characterLook = character.GetComponent<CharacterLook>();
+			_weaponHolder = character.GetComponent<WeaponHolder>();
+		}
 	}
 }

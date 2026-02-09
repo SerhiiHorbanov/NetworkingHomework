@@ -2,12 +2,15 @@ using Gameplay.Weapons;
 using Unity.Netcode;
 using UnityEngine;
 
-public class WeaponHolder : NetworkBehaviour
+namespace Gameplay.PlayerCharacter
 {
-	[SerializeField] private Weapon _HoldingWeapon;
-
-	public void Attack()
+	public class WeaponHolder : NetworkBehaviour
 	{
-		_HoldingWeapon.Shoot();
+		[SerializeField] private Weapon _HoldingWeapon;
+
+		public void Attack()
+		{
+			_HoldingWeapon.Shoot();
+		}
 	}
 }

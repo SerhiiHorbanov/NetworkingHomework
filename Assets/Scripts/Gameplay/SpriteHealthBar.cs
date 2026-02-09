@@ -1,3 +1,4 @@
+using Gameplay.PlayerCharacter;
 using UnityEngine;
 
 namespace Gameplay
