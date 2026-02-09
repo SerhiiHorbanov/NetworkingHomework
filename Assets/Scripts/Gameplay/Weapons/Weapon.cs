@@ -24,10 +24,9 @@ namespace Gameplay.Weapons
 			if (Physics.Raycast(_ShootingOrigin.position, _ShootingOrigin.forward, out RaycastHit hit, RaycastLength))
 			{
 				didHit = true;
-				print($"hit {hit.collider.gameObject.name}");
+				
 				if (hit.collider.TryGetComponent(out CharacterHealth characterHealth))
 				{
-					print("and it has health");
 					characterHealth.DamageWithSync(_Damage);
 				}
 			}
