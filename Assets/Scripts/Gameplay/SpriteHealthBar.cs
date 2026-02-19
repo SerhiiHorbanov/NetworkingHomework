@@ -19,7 +19,6 @@ namespace Gameplay
 
 		private void OnEnable()
 		{
-			print("Enabled");
 			_Health.OnValueChanged += UpdateValue;
 			UpdateValue(_Health.Hp);
 		}
