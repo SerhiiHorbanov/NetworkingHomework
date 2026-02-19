@@ -12,5 +12,8 @@ namespace Gameplay.PlayerCharacter
 
 		public DamageOverTime WithTimeLeft(float value)
 			=> new() {_DPS = _DPS, _TimeLeft = value};
+		
+		public DamageOverTime WithDPS(float value)
+			=> new() {_DPS = value, _TimeLeft = _TimeLeft};
 	}
 }

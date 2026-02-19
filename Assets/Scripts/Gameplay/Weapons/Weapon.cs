@@ -7,8 +7,10 @@ namespace Gameplay.Weapons
 	public class Weapon : NetworkBehaviour
 	{
 		[SerializeField] private Transform _ShootingOrigin;
-		[SerializeField] private float _Damage;
+		[SerializeField] private float _InstantDamage;
 		[SerializeField] private DamageOverTime _DamageOverTime;
+		[SerializeField] private float _MinDPSOfDOT;
+		[SerializeField] private float _MaxDPSOfDOT;
 		[SerializeField] private GameObject _ShotGraphicsPrefab;
 	
 		private const float RaycastLength = 10_000f;
@@ -21,16 +23,15 @@ namespace Gameplay.Weapons
 		[ServerRpc]
 		private void ShootServerRPC()
 		{
-			bool didHit = false;
+			bool didHit = Physics.Raycast(_ShootingOrigin.position, _ShootingOrigin.forward, out RaycastHit hit, RaycastLength);
 		
-			if (Physics.Raycast(_ShootingOrigin.position, _ShootingOrigin.forward, out RaycastHit hit, RaycastLength))
+			if (didHit)
 			{
-				didHit = true;
-				
 				if (hit.collider.TryGetComponent(out CharacterHealth characterHealth))
 				{
-					characterHealth.DamageWithSync(_Damage);
-					characterHealth.AddDamageOverTime(_DamageOverTime);
+					characterHealth.DamageWithSync(_InstantDamage);
+					DamageOverTime dot = _DamageOverTime.WithDPS(Random.Range(_MinDPSOfDOT, _MaxDPSOfDOT));
+					characterHealth.AddDamageOverTime(dot);
 				}
 			}
 
